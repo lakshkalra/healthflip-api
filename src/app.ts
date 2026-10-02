@@ -1,5 +1,6 @@
 import cors from '@fastify/cors';
 import Fastify, { type FastifyInstance } from 'fastify';
+import type { IncomingMessage, ServerResponse } from 'node:http';
 
 import { closeDatabase, createDatabase } from './db/client.js';
 import { createGoalRepository } from './db/repositories/goal.repository.js';
@@ -94,14 +95,21 @@ export function buildApp(options: { databaseUrl: string }): FastifyInstance {
 
 /**
  * Vercel's Fastify adapter loads the conventional src/app entrypoint and
- * expects its default export to be the server instance. Keep local tests and
- * src/server.ts factory-based while exposing a conventional instance here.
+ * expects its default export to be a server or request handler. Keep local
+ * tests and src/server.ts factory-based while exposing a conventional handler
+ * here.
  */
 const vercelApp = buildApp({
   databaseUrl: process.env.DATABASE_URL ?? 'postgresql://127.0.0.1:5432/healthflip',
 });
 
-export default vercelApp;
+export default async function vercelHandler(
+  request: IncomingMessage,
+  response: ServerResponse,
+): Promise<void> {
+  await vercelApp.ready();
+  vercelApp.server.emit('request', request, response);
+}
 
 function isUniqueConstraintViolation(error: unknown): boolean {
   return (
