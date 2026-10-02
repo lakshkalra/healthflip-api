@@ -138,6 +138,60 @@ describe('Phase 1 API', () => {
     assert.equal(meals[0].name, 'Breakfast');
     assert.equal(meals[0].mealType, 'breakfast');
   });
+
+  it('returns a deterministic fallback meal estimate and validates its input', async () => {
+    const session = await createGuest();
+    const authorization = { authorization: 'Bearer ' + session.accessToken };
+
+    const estimate = await app.inject({
+      headers: authorization,
+      method: 'POST',
+      payload: { description: '2 eggs with toast', mealType: 'breakfast' },
+      url: '/v1/ai/meal-estimate',
+    });
+
+    assert.equal(estimate.statusCode, 200);
+    assert.equal(estimate.json().estimate.source, 'fallback');
+    assert.equal(estimate.json().estimate.name, '2 eggs with toast');
+    assert.equal(estimate.json().estimate.caloriesKcal, 420);
+    assert.equal(Array.isArray(estimate.json().estimate.assumptions), true);
+
+    const invalid = await app.inject({
+      headers: authorization,
+      method: 'POST',
+      payload: { description: 'x' },
+      url: '/v1/ai/meal-estimate',
+    });
+
+    assert.equal(invalid.statusCode, 400);
+    assert.equal(invalid.json().error.code, 'VALIDATION_ERROR');
+  });
+
+  it('builds a fallback daily insight from the guest goal and persisted meals', async () => {
+    const session = await createGuest();
+    const authorization = { authorization: 'Bearer ' + session.accessToken };
+
+    await app.inject({
+      headers: authorization,
+      method: 'PUT',
+      payload: { dailyCalorieTarget: 2000, startsOn: '2026-10-02', type: 'maintain' },
+      url: '/v1/goals/current',
+    });
+    await createMeal(authorization, 'Egg breakfast', 420, '2026-10-02T03:00:00.000Z', 'breakfast');
+
+    const insight = await app.inject({
+      headers: authorization,
+      method: 'GET',
+      query: { date: '2026-10-02', timezone: 'Asia/Kolkata' },
+      url: '/v1/ai/daily-insight',
+    });
+
+    assert.equal(insight.statusCode, 200);
+    assert.equal(insight.json().insight.date, '2026-10-02');
+    assert.equal(insight.json().insight.source, 'fallback');
+    assert.match(insight.json().insight.message, /1 meal/);
+    assert.ok(insight.json().insight.nextAction);
+  });
 });
 
 async function createGuest(): Promise<{ accessToken: string }> {

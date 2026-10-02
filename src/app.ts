@@ -6,6 +6,10 @@ import { closeDatabase, createDatabase } from './db/client.js';
 import { createGoalRepository } from './db/repositories/goal.repository.js';
 import { createGuestRepository } from './db/repositories/guest.repository.js';
 import { createMealRepository } from './db/repositories/meal.repository.js';
+import { createFallbackProvider } from './shared/ai/fallback-provider.js';
+import { createAiController } from './modules/ai/ai.controller.js';
+import { registerAiRouter } from './modules/ai/ai.router.js';
+import { createAiService } from './modules/ai/ai.service.js';
 import { createDashboardController } from './modules/dashboard/dashboard.controller.js';
 import { registerDashboardRouter } from './modules/dashboard/dashboard.router.js';
 import { createDashboardService } from './modules/dashboard/dashboard.service.js';
@@ -80,6 +84,11 @@ export function buildApp(options: { databaseUrl: string }): FastifyInstance {
   registerGuestRouter(app, createGuestController(createGuestService(guestRepository)), requireGuest);
   registerGoalRouter(app, createGoalController(createGoalService(goalRepository)), requireGuest);
   registerMealRouter(app, createMealController(createMealService(mealRepository)), requireGuest);
+  registerAiRouter(
+    app,
+    createAiController(createAiService(goalRepository, mealRepository, createFallbackProvider())),
+    requireGuest,
+  );
   registerDashboardRouter(
     app,
     createDashboardController(createDashboardService(goalRepository, mealRepository)),

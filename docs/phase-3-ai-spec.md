@@ -180,10 +180,10 @@ response as `source: fallback`.
 
 ### Phase 3.1 — Backend fallback slice
 
-- [ ] Implement validators, helpers, service, controller, and routes.
-- [ ] Implement deterministic fallback provider.
-- [ ] Add API tests for successful estimates, insights, validation, and failures.
-- [ ] Run typecheck and integration tests.
+- [x] Implement validators, helpers, service, controller, and routes.
+- [x] Implement deterministic fallback provider.
+- [x] Add API tests for successful estimates, insights, validation, and provider failures.
+- [x] Run typecheck and integration tests.
 
 ### Phase 3.2 — Gemini provider
 
