@@ -92,6 +92,18 @@ export function buildApp(options: { databaseUrl: string }): FastifyInstance {
   return app;
 }
 
+/**
+ * Vercel's Fastify adapter loads the conventional src/app entrypoint and
+ * expects its default export to be the server instance. Keep local tests and
+ * src/server.ts factory-based while exposing the production instance only in
+ * the Vercel runtime.
+ */
+const vercelApp = process.env.VERCEL === '1' && process.env.DATABASE_URL
+  ? buildApp({ databaseUrl: process.env.DATABASE_URL })
+  : null;
+
+export default vercelApp;
+
 function isUniqueConstraintViolation(error: unknown): boolean {
   return (
     typeof error === 'object' &&
