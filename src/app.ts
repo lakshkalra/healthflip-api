@@ -95,12 +95,11 @@ export function buildApp(options: { databaseUrl: string }): FastifyInstance {
 /**
  * Vercel's Fastify adapter loads the conventional src/app entrypoint and
  * expects its default export to be the server instance. Keep local tests and
- * src/server.ts factory-based while exposing the production instance only in
- * the Vercel runtime.
+ * src/server.ts factory-based while exposing a conventional instance here.
  */
-const vercelApp = process.env.VERCEL === '1' && process.env.DATABASE_URL
-  ? buildApp({ databaseUrl: process.env.DATABASE_URL })
-  : null;
+const vercelApp = buildApp({
+  databaseUrl: process.env.DATABASE_URL ?? 'postgresql://127.0.0.1:5432/healthflip',
+});
 
 export default vercelApp;
 
