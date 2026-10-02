@@ -12,6 +12,9 @@ test('maps provider timeout failures to a structured app error', async () => {
       estimateMeal: async () => {
         throw new AiProviderError('AI_PROVIDER_TIMEOUT', 'The provider timed out.');
       },
+      estimateMealFromImage: async () => {
+        throw new Error('not used');
+      },
       dailyInsight: async () => {
         throw new Error('not used');
       },

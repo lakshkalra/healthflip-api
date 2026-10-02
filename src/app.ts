@@ -26,7 +26,7 @@ import { createGuestAuth } from './shared/auth/guest-auth.js';
 import { AppError } from './shared/errors.js';
 
 export function buildApp(options: { databaseUrl: string }): FastifyInstance {
-  const app = Fastify({ logger: true });
+  const app = Fastify({ bodyLimit: 2_500_000, logger: true });
   const database = createDatabase(options.databaseUrl);
 
   app.decorateRequest('guest', null);

@@ -1,6 +1,6 @@
 import type { GoalRepository } from '../../db/repositories/goal.repository.js';
 import type { MealRepository } from '../../db/repositories/meal.repository.js';
-import { AiProviderError, type AiProvider } from '../../shared/ai/ai-provider.js';
+import { AiProviderError, type AiProvider, type ImageMealEstimateInput } from '../../shared/ai/ai-provider.js';
 import { AppError } from '../../shared/errors.js';
 import { getDayRangeUtc } from '../../shared/time.js';
 import { serializeDailyInsight, serializeMealEstimate } from './ai.helper.js';
@@ -15,6 +15,14 @@ export function createAiService(
     async estimateMeal(input: MealEstimateInput) {
       try {
         return serializeMealEstimate(await provider.estimateMeal(input));
+      } catch (error) {
+        throw mapProviderError(error);
+      }
+    },
+
+    async estimateMealFromImage(input: ImageMealEstimateInput) {
+      try {
+        return serializeMealEstimate(await provider.estimateMealFromImage(input));
       } catch (error) {
         throw mapProviderError(error);
       }

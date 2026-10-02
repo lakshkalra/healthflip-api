@@ -10,6 +10,17 @@ export const mealEstimateValidator = z
   })
   .strict();
 
+export const imageMealEstimateValidator = z
+  .object({
+    imageBase64: z
+      .string()
+      .regex(/^[A-Za-z0-9+/]+={0,2}$/, 'Provide a valid base64 image.')
+      .max(2_000_000, 'Image must be smaller than 1.5 MB after encoding.'),
+    mealType: mealTypeValidator.optional(),
+    mimeType: z.enum(['image/jpeg', 'image/png', 'image/webp']),
+  })
+  .strict();
+
 export const dailyInsightQueryValidator = z
   .object({
     date: dateSchema,

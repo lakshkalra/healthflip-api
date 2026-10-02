@@ -167,6 +167,24 @@ describe('Phase 1 API', () => {
     assert.equal(invalid.json().error.code, 'VALIDATION_ERROR');
   });
 
+  it('returns a reviewable fallback estimate for a meal image', async () => {
+    const session = await createGuest();
+    const authorization = { authorization: 'Bearer ' + session.accessToken };
+
+    const estimate = await app.inject({
+      headers: authorization,
+      method: 'POST',
+      payload: { imageBase64: 'aGVhbHRoZmxpcA==', mealType: 'lunch', mimeType: 'image/jpeg' },
+      url: '/v1/ai/meal-estimate-image',
+    });
+
+    assert.equal(estimate.statusCode, 200);
+    assert.equal(estimate.json().estimate.source, 'fallback');
+    assert.equal(estimate.json().estimate.name, 'lunch meal photo');
+    assert.equal(estimate.json().estimate.caloriesKcal, 350);
+    assert.match(estimate.json().estimate.assumptions[0], /cannot identify ingredients/);
+  });
+
   it('builds a fallback daily insight from the guest goal and persisted meals', async () => {
     const session = await createGuest();
     const authorization = { authorization: 'Bearer ' + session.accessToken };

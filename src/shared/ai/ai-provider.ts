@@ -6,6 +6,12 @@ export type MealEstimateInput = {
   mealType?: 'breakfast' | 'lunch' | 'snacks' | 'dinner';
 };
 
+export type ImageMealEstimateInput = {
+  imageBase64: string;
+  mealType?: 'breakfast' | 'lunch' | 'snacks' | 'dinner';
+  mimeType: 'image/jpeg' | 'image/png' | 'image/webp';
+};
+
 export type MealEstimate = {
   assumptions: string[];
   caloriesKcal: number;
@@ -40,6 +46,7 @@ export type DailyInsight = {
 
 export interface AiProvider {
   estimateMeal(input: MealEstimateInput): Promise<MealEstimate>;
+  estimateMealFromImage(input: ImageMealEstimateInput): Promise<MealEstimate>;
   dailyInsight(context: DailyInsightContext): Promise<DailyInsight>;
 }
 

@@ -1,7 +1,7 @@
 import type { FastifyRequest } from 'fastify';
 
 import { parseOrThrow } from '../../shared/validation.js';
-import { dailyInsightQueryValidator, mealEstimateValidator } from './ai.validator.js';
+import { dailyInsightQueryValidator, imageMealEstimateValidator, mealEstimateValidator } from './ai.validator.js';
 import type { createAiService } from './ai.service.js';
 
 export function createAiController(service: ReturnType<typeof createAiService>) {
@@ -9,6 +9,11 @@ export function createAiController(service: ReturnType<typeof createAiService>) 
     async estimateMeal(request: FastifyRequest) {
       const input = parseOrThrow(mealEstimateValidator, request.body);
       return { estimate: await service.estimateMeal(input) };
+    },
+
+    async estimateMealFromImage(request: FastifyRequest) {
+      const input = parseOrThrow(imageMealEstimateValidator, request.body);
+      return { estimate: await service.estimateMealFromImage(input) };
     },
 
     async dailyInsight(request: FastifyRequest) {

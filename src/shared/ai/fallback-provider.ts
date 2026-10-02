@@ -2,6 +2,7 @@ import type {
   AiProvider,
   DailyInsight,
   DailyInsightContext,
+  ImageMealEstimateInput,
   MealEstimate,
   MealEstimateInput,
 } from './ai-provider.js';
@@ -19,9 +20,32 @@ export function createFallbackProvider(): AiProvider {
       return estimateMeal(input);
     },
 
+    async estimateMealFromImage(input) {
+      return estimateMealFromImage(input);
+    },
+
     async dailyInsight(context) {
       return dailyInsight(context);
     },
+  };
+}
+
+function estimateMealFromImage(input: ImageMealEstimateInput): MealEstimate {
+  const category = input.mealType ? input.mealType + ' ' : '';
+
+  return {
+    assumptions: [
+      'This is a rough wellness estimate; the local provider cannot identify ingredients from images yet.',
+      category ? 'Meal category: ' + input.mealType + '.' : 'Meal category was not provided.',
+      'Review the estimate and adjust the portion before saving.',
+    ],
+    caloriesKcal: 350,
+    carbsGrams: 45,
+    confidence: 'low',
+    fatGrams: 12,
+    name: category ? category + 'meal photo' : 'Meal photo',
+    proteinGrams: 15,
+    source: 'fallback',
   };
 }
 

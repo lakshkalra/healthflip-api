@@ -23,9 +23,9 @@ creation API.
 Voice input will convert speech to text and reuse this exact contract. It is not a
 second estimation pipeline.
 
-Image input will be added after the text contract is stable. The image path will use the
-same structured response and confirmation step, with explicit size and permission
-handling.
+Image input reuses the same structured response and confirmation step, with explicit
+size, MIME, and permission handling. The local fallback is intentionally conservative
+until a live vision-capable provider is configured.
 
 ### Kimbo daily insight
 
@@ -124,8 +124,14 @@ The service must derive this from persisted data, not from client-supplied total
 
 ```text
 POST /v1/ai/meal-estimate
+POST /v1/ai/meal-estimate-image
 GET  /v1/ai/daily-insight?date=YYYY-MM-DD&timezone=IANA_TIMEZONE
 ```
+
+The image route accepts a resized base64 JPEG, PNG, or WebP payload with an optional
+meal category. It returns the same reviewable estimate shape as the text route. The
+local fallback provider intentionally does not infer ingredients from pixels; it returns
+a clearly marked low-confidence estimate until a live provider is configured.
 
 Both routes require the existing anonymous guest session. API keys are never accepted
 from the mobile client and are never returned in an error response.
@@ -194,9 +200,9 @@ response as `source: fallback`.
 
 ### Phase 3.3 — Mobile input channels
 
-- [ ] Add text estimate review and confirm flow.
-- [ ] Add voice-to-text input reusing the text estimate endpoint.
-- [ ] Add image capture/picker, compression, upload limits, and review flow.
+- [x] Add text estimate review and confirm flow.
+- [x] Add voice-to-text input reusing the text estimate endpoint.
+- [x] Add image capture/picker, compression, upload limits, and review flow.
 
 ### Phase 3.4 — Kimbo and closure
 
