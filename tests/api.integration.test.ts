@@ -81,6 +81,7 @@ describe('Phase 1 API', () => {
       payload: {
         caloriesKcal: 450,
         loggedAt: '2026-10-02T02:00:00.000Z',
+        mealType: 'lunch',
         name: 'Vegetable poha',
       },
       url: '/v1/meals',
@@ -88,6 +89,7 @@ describe('Phase 1 API', () => {
 
     assert.equal(meal.statusCode, 200);
     assert.equal(meal.json().meal.name, 'Vegetable poha');
+    assert.equal(meal.json().meal.mealType, 'lunch');
 
     const anotherGuest = await createGuest();
     const forbiddenMealRead = await app.inject({
@@ -111,8 +113,8 @@ describe('Phase 1 API', () => {
       url: '/v1/goals/current',
     });
 
-    const breakfast = await createMeal(authorization, 'Breakfast', 400, '2026-10-02T02:00:00.000Z');
-    const snack = await createMeal(authorization, 'Snack', 150, '2026-10-02T10:00:00.000Z');
+    const breakfast = await createMeal(authorization, 'Breakfast', 400, '2026-10-02T02:00:00.000Z', 'breakfast');
+    const snack = await createMeal(authorization, 'Snack', 150, '2026-10-02T10:00:00.000Z', 'snacks');
 
     const deleted = await app.inject({
       headers: authorization,
@@ -134,6 +136,7 @@ describe('Phase 1 API', () => {
     assert.equal(meals.length, 1);
     assert.equal(meals[0].id, breakfast.id);
     assert.equal(meals[0].name, 'Breakfast');
+    assert.equal(meals[0].mealType, 'breakfast');
   });
 });
 
@@ -148,11 +151,12 @@ async function createMeal(
   name: string,
   caloriesKcal: number,
   loggedAt: string,
+  mealType: 'breakfast' | 'lunch' | 'snacks' | 'dinner' = 'snacks',
 ): Promise<{ id: string }> {
   const response = await app.inject({
     headers,
     method: 'POST',
-    payload: { caloriesKcal, loggedAt, name },
+    payload: { caloriesKcal, loggedAt, mealType, name },
     url: '/v1/meals',
   });
   assert.equal(response.statusCode, 200);

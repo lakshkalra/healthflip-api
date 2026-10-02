@@ -5,12 +5,14 @@ import { mealEntries } from '../schema/index.js';
 
 type MealRecord = typeof mealEntries.$inferSelect;
 type MealSource = 'manual' | 'photo' | 'voice';
+type MealType = 'breakfast' | 'lunch' | 'snacks' | 'dinner';
 
 export interface CreateMealRecord {
   caloriesKcal?: number;
   carbsGrams?: number;
   fatGrams?: number;
   loggedAt: Date;
+  mealType: MealType;
   name: string;
   note?: string;
   proteinGrams?: number;
@@ -22,6 +24,7 @@ export interface UpdateMealRecord {
   carbsGrams?: number | null;
   fatGrams?: number | null;
   loggedAt?: Date;
+  mealType?: MealType;
   name?: string;
   note?: string | null;
   proteinGrams?: number | null;

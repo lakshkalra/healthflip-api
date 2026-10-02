@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 export const mealSourceValidator = z.enum(['manual', 'photo', 'voice']);
+export const mealTypeValidator = z.enum(['breakfast', 'lunch', 'snacks', 'dinner']);
 const nutritionValueSchema = z.number().int().min(0).max(100_000);
 
 export const createMealValidator = z
@@ -9,6 +10,7 @@ export const createMealValidator = z
     carbsGrams: nutritionValueSchema.optional(),
     fatGrams: nutritionValueSchema.optional(),
     loggedAt: z.string().datetime({ offset: true }),
+    mealType: mealTypeValidator.default('snacks'),
     name: z.string().trim().min(1).max(120),
     note: z.string().trim().max(1000).optional(),
     proteinGrams: nutritionValueSchema.optional(),
@@ -22,6 +24,7 @@ export const updateMealValidator = z
     carbsGrams: nutritionValueSchema.nullable().optional(),
     fatGrams: nutritionValueSchema.nullable().optional(),
     loggedAt: z.string().datetime({ offset: true }).optional(),
+    mealType: mealTypeValidator.optional(),
     name: z.string().trim().min(1).max(120).optional(),
     note: z.string().trim().max(1000).nullable().optional(),
     proteinGrams: nutritionValueSchema.nullable().optional(),

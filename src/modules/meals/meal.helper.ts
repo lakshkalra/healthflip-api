@@ -34,6 +34,7 @@ export function serializeMeal(meal: {
   fatGrams: number | null;
   id: string;
   loggedAt: Date;
+  mealType: 'breakfast' | 'lunch' | 'snacks' | 'dinner';
   name: string;
   note: string | null;
   proteinGrams: number | null;
@@ -47,6 +48,7 @@ export function serializeMeal(meal: {
     fatGrams: meal.fatGrams,
     id: meal.id,
     loggedAt: meal.loggedAt.toISOString(),
+    mealType: meal.mealType,
     name: meal.name,
     note: meal.note,
     proteinGrams: meal.proteinGrams,

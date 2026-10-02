@@ -4,6 +4,7 @@ import { check, index, integer, pgEnum, pgTable, text, timestamp, uuid, varchar 
 import { guests } from './guests.js';
 
 export const mealSource = pgEnum('meal_source', ['manual', 'photo', 'voice']);
+export const mealType = pgEnum('meal_type', ['breakfast', 'lunch', 'snacks', 'dinner']);
 
 export const mealEntries = pgTable(
   'meal_entries',
@@ -14,6 +15,7 @@ export const mealEntries = pgTable(
       .references(() => guests.id, { onDelete: 'cascade' }),
     name: varchar('name', { length: 120 }).notNull(),
     source: mealSource('source').default('manual').notNull(),
+    mealType: mealType('meal_type').default('snacks').notNull(),
     loggedAt: timestamp('logged_at', { withTimezone: true }).notNull(),
     caloriesKcal: integer('calories_kcal'),
     proteinGrams: integer('protein_grams'),
