@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: healthflip-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: healthflip
+      POSTGRES_PASSWORD: healthflip
+      POSTGRES_DB: healthflip
+    ports:
+      - "5432:5432"
+    volumes:
+      - healthflip-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  healthflip-postgres-data:
