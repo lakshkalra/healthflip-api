@@ -1,3 +1,4 @@
+import { serializePlanTargets } from '../goals/goal.helper.js';
 import { serializeMeal } from '../meals/meal.helper.js';
 
 export function serializeDailyDashboard({
@@ -7,7 +8,7 @@ export function serializeDailyDashboard({
   timeZone,
 }: {
   date: string;
-  goal: { dailyCalorieTarget: number; id: string; type: 'lose' | 'maintain' | 'gain' } | null;
+  goal: (Parameters<typeof serializePlanTargets>[0] & { dailyCalorieTarget: number; id: string; type: 'lose' | 'maintain' | 'gain' }) | null;
   summary: { meals: Parameters<typeof serializeMeal>[0][]; totalCalories: number };
   timeZone: string;
 }) {
@@ -20,6 +21,7 @@ export function serializeDailyDashboard({
           dailyCalorieTarget,
           id: goal.id,
           type: goal.type,
+          ...serializePlanTargets(goal),
         }
       : null,
     meals: summary.meals.map(serializeMeal),

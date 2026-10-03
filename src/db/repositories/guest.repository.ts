@@ -5,6 +5,7 @@ import { guests, guestSessions } from '../schema/index.js';
 
 export interface GuestRepository {
   createGuestWithSession(tokenHash: string): Promise<{ createdAt: Date; id: string }>;
+  deleteById(guestId: string): Promise<boolean>;
   findActiveGuestByTokenHash(tokenHash: string): Promise<{ id: string } | null>;
   findById(guestId: string): Promise<{ createdAt: Date; id: string } | null>;
 }
@@ -38,6 +39,11 @@ export function createGuestRepository(db: DatabaseClient): GuestRepository {
         .limit(1);
 
       return guest ?? null;
+    },
+
+    async deleteById(guestId) {
+      const deleted = await db.delete(guests).where(eq(guests.id, guestId)).returning({ id: guests.id });
+      return deleted.length > 0;
     },
   };
 }

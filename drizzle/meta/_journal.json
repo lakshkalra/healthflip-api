@@ -29,6 +29,34 @@
       "when": 1790992043824,
       "tag": "0003_decimal_macros",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790998002117,
+      "tag": "0004_profile_plan_memory",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790999131722,
+      "tag": "0005_wellness_plans",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1791017166355,
+      "tag": "0006_guest_foods",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1791018678715,
+      "tag": "0007_health_reports_water",
+      "breakpoints": true
     }
   ]
 }

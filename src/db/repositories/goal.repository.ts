@@ -6,7 +6,12 @@ import { goals } from '../schema/index.js';
 type GoalRecord = typeof goals.$inferSelect;
 
 export interface GoalWrite {
+  carbsTargetGrams?: number | null;
   dailyCalorieTarget: number;
+  dailyStepsTarget?: number | null;
+  fatTargetGrams?: number | null;
+  planRationale?: string | null;
+  proteinTargetGrams?: number | null;
   startsOn: string;
   type: 'lose' | 'maintain' | 'gain';
 }

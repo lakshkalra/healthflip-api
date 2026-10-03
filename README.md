@@ -57,5 +57,8 @@ under `src/`; production configuration needs `DATABASE_URL` and, for live AI,
 `GEMINI_API_KEY` for the managed PostgreSQL instance. Keep the Gemini key in the backend
 environment only. When the key is absent, the API deliberately uses the deterministic
 fallback provider for local development and tests. Optional settings are `GEMINI_MODEL`
-(default `gemini-3.8-flash`) and `GEMINI_TIMEOUT_MS` (default `15000`). Deployment and
+(default `gemini-3.8-flash`), `GEMINI_LIVE_MODEL`, `GEMINI_LIVE_VOICE` (default `Sulafat`) and
+`GEMINI_TIMEOUT_MS` (default `15000`). `GEMINI_MODEL` accepts a comma-separated fallback order:
+free-tier quotas are per model, so when one model is out of quota (429), overloaded (503) or
+retired (404) the next is tried and the failed model is skipped for five minutes. Deployment and
 credential setup are deferred until the user authorizes them.

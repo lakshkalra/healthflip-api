@@ -26,5 +26,9 @@ export function createGuestService(guestRepository: GuestRepository) {
 
       return serializeGuest(guest);
     },
+
+    async resetGuest(guestId: string) {
+      if (!(await guestRepository.deleteById(guestId))) throw notFound('Guest');
+    },
   };
 }

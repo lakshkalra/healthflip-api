@@ -6,6 +6,12 @@ import { closeDatabase, createDatabase } from './db/client.js';
 import { createGoalRepository } from './db/repositories/goal.repository.js';
 import { createGuestRepository } from './db/repositories/guest.repository.js';
 import { createMealRepository } from './db/repositories/meal.repository.js';
+import { createFoodRepository } from './db/repositories/food.repository.js';
+import { createHealthReportRepository } from './db/repositories/health-report.repository.js';
+import { createWaterRepository } from './db/repositories/water.repository.js';
+import { createMemoryRepository } from './db/repositories/memory.repository.js';
+import { createProfileRepository } from './db/repositories/profile.repository.js';
+import { createWellnessPlanRepository } from './db/repositories/wellness-plan.repository.js';
 import { createConfiguredAiProvider } from './shared/ai/provider-factory.js';
 import { createAiController } from './modules/ai/ai.controller.js';
 import { registerAiRouter } from './modules/ai/ai.router.js';
@@ -22,6 +28,24 @@ import { createGuestService } from './modules/guests/guest.service.js';
 import { createMealController } from './modules/meals/meal.controller.js';
 import { registerMealRouter } from './modules/meals/meal.router.js';
 import { createMealService } from './modules/meals/meal.service.js';
+import { createFoodController } from './modules/foods/food.controller.js';
+import { createReportController } from './modules/reports/report.controller.js';
+import { registerReportRouter } from './modules/reports/report.router.js';
+import { createReportService } from './modules/reports/report.service.js';
+import { createWaterController } from './modules/water/water.controller.js';
+import { registerWaterRouter } from './modules/water/water.router.js';
+import { createWaterService } from './modules/water/water.service.js';
+import { registerFoodRouter } from './modules/foods/food.router.js';
+import { createFoodService } from './modules/foods/food.service.js';
+import { createMemoryController } from './modules/memories/memory.controller.js';
+import { registerMemoryRouter } from './modules/memories/memory.router.js';
+import { createMemoryService } from './modules/memories/memory.service.js';
+import { createPlanController } from './modules/plans/plan.controller.js';
+import { registerPlanRouter } from './modules/plans/plan.router.js';
+import { createPlanService } from './modules/plans/plan.service.js';
+import { createProfileController } from './modules/profile/profile.controller.js';
+import { registerProfileRouter } from './modules/profile/profile.router.js';
+import { createProfileService } from './modules/profile/profile.service.js';
 import { createGuestAuth } from './shared/auth/guest-auth.js';
 import { AppError } from './shared/errors.js';
 
@@ -79,6 +103,12 @@ export function buildApp(options: { databaseUrl: string }): FastifyInstance {
   const guestRepository = createGuestRepository(database.db);
   const goalRepository = createGoalRepository(database.db);
   const mealRepository = createMealRepository(database.db);
+  const profileRepository = createProfileRepository(database.db);
+  const memoryRepository = createMemoryRepository(database.db);
+  const foodRepository = createFoodRepository(database.db);
+  const healthReportRepository = createHealthReportRepository(database.db);
+  const waterRepository = createWaterRepository(database.db);
+  const planRepository = createWellnessPlanRepository(database.db);
   const requireGuest = createGuestAuth(guestRepository);
   const aiProvider = createConfiguredAiProvider();
 
@@ -90,14 +120,24 @@ export function buildApp(options: { databaseUrl: string }): FastifyInstance {
   registerGuestRouter(app, createGuestController(createGuestService(guestRepository)), requireGuest);
   registerGoalRouter(app, createGoalController(createGoalService(goalRepository)), requireGuest);
   registerMealRouter(app, createMealController(createMealService(mealRepository)), requireGuest);
+  registerProfileRouter(app, createProfileController(createProfileService(profileRepository)), requireGuest);
+  registerMemoryRouter(app, createMemoryController(createMemoryService(memoryRepository)), requireGuest);
+  registerFoodRouter(app, createFoodController(createFoodService(foodRepository)), requireGuest);
+  registerReportRouter(app, createReportController(createReportService(healthReportRepository, aiProvider.provider)), requireGuest);
+  registerWaterRouter(app, createWaterController(createWaterService(waterRepository)), requireGuest);
+  registerPlanRouter(
+    app,
+    createPlanController(createPlanService(planRepository, profileRepository, goalRepository, memoryRepository, aiProvider.provider, healthReportRepository)),
+    requireGuest,
+  );
   registerAiRouter(
     app,
-    createAiController(createAiService(goalRepository, mealRepository, aiProvider.provider, aiProvider.liveSessionProvider)),
+    createAiController(createAiService(goalRepository, mealRepository, aiProvider.provider, aiProvider.liveSessionProvider, profileRepository, memoryRepository, healthReportRepository)),
     requireGuest,
   );
   registerDashboardRouter(
     app,
-    createDashboardController(createDashboardService(goalRepository, mealRepository)),
+    createDashboardController(createDashboardService(goalRepository, mealRepository, waterRepository, healthReportRepository)),
     requireGuest,
   );
 

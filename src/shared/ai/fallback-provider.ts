@@ -1,11 +1,15 @@
-import type {
-  AiProvider,
-  DailyInsight,
-  DailyInsightContext,
-  ImageMealEstimateInput,
-  MealEstimate,
-  MealEstimateInput,
+import {
+  AiProviderError,
+  type AiProvider,
+  type DailyInsight,
+  type DailyInsightContext,
+  type ImageMealEstimateInput,
+  type MealEstimate,
+  type MealEstimateInput,
+  type PlanRecommendation,
+  type PlanRecommendationContext,
 } from './ai-provider.js';
+import { fallbackDietPlan, fallbackExercisePlan } from './fallback-plans.js';
 
 const fallbackProfiles = [
   { words: ['egg', 'paneer', 'tofu', 'chicken', 'fish', 'dal'], caloriesKcal: 420, proteinGrams: 24, carbsGrams: 38, fatGrams: 16 },
@@ -27,6 +31,37 @@ export function createFallbackProvider(): AiProvider {
     async dailyInsight(context) {
       return dailyInsight(context);
     },
+
+    async recommendPlan(context) {
+      return fallbackPlan(context);
+    },
+
+    async generateDietPlan(context, options) {
+      return { content: fallbackDietPlan(context, options), source: 'fallback' };
+    },
+
+    async generateExercisePlan(context, options) {
+      return { content: fallbackExercisePlan(context, options), source: 'fallback' };
+    },
+
+    // Health values must come from the report itself, so there is no local stand-in.
+    async extractReport() {
+      throw new AiProviderError('AI_PROVIDER_UNAVAILABLE', 'Flip can’t read reports right now. Please try again later.');
+    },
+  };
+}
+
+// The deterministic baseline with a plain-language explanation; also used when the AI is unavailable.
+export function fallbackPlan({ baseline, goalType, profile }: PlanRecommendationContext): PlanRecommendation {
+  const direction = goalType === 'lose' ? 'a gentle deficit' : goalType === 'gain' ? 'a modest surplus' : 'maintenance';
+  return {
+    carbsGrams: baseline.carbsGrams,
+    dailyCalorieTarget: baseline.dailyCalorieTarget,
+    dailySteps: baseline.dailySteps,
+    fatGrams: baseline.fatGrams,
+    proteinGrams: baseline.proteinGrams,
+    rationale: `Hi ${profile.name}! Based on your size and ${profile.activityLevel} activity, this sets ${direction} with steady protein and an achievable step goal. Adjust it anytime.`,
+    source: 'fallback',
   };
 }
 
@@ -43,6 +78,8 @@ function estimateMealFromImage(input: ImageMealEstimateInput): MealEstimate {
     carbsGrams: 45,
     confidence: 'low',
     fatGrams: 12,
+    // The local provider cannot see the food, so there is nothing to itemise.
+    items: [],
     name: category ? category + 'meal photo' : 'Meal photo',
     proteinGrams: 15,
     source: 'fallback',
@@ -68,6 +105,7 @@ function estimateMeal(input: MealEstimateInput): MealEstimate {
     carbsGrams: profile.carbsGrams,
     confidence: 'low',
     fatGrams: profile.fatGrams,
+    items: [{ caloriesKcal: profile.caloriesKcal, carbsGrams: profile.carbsGrams, fatGrams: profile.fatGrams, grams: 250, name: description.slice(0, 80), proteinGrams: profile.proteinGrams }],
     name: description.slice(0, 120),
     proteinGrams: profile.proteinGrams,
     source: 'fallback',

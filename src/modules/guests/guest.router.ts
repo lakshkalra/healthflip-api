@@ -10,4 +10,5 @@ export function registerGuestRouter(
 ): void {
   app.post('/v1/guests', controller.create);
   app.get('/v1/me', { preHandler: requireGuest }, controller.getCurrent);
+  app.delete('/v1/me', { preHandler: requireGuest }, controller.reset);
 }

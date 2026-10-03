@@ -33,6 +33,7 @@ export function createConfiguredAiProvider(environment: NodeJS.ProcessEnv = proc
     liveSessionProvider: createGeminiLiveSessionProvider({
       apiKey,
       model: environment.GEMINI_LIVE_MODEL,
+      voice: environment.GEMINI_LIVE_VOICE,
       timeoutMs: Number(environment.GEMINI_TIMEOUT_MS) || 15_000,
     }),
   };

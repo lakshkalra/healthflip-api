@@ -18,12 +18,27 @@ test('maps provider timeout failures to a structured app error', async () => {
       dailyInsight: async () => {
         throw new Error('not used');
       },
+      recommendPlan: async () => {
+        throw new Error('not used');
+      },
+      generateDietPlan: async () => {
+        throw new Error('not used');
+      },
+      generateExercisePlan: async () => {
+        throw new Error('not used');
+      },
+      extractReport: async () => {
+        throw new Error('not used');
+      },
     },
     { createSession: async () => { throw new Error('not used'); } },
+    { find: async () => null } as never,
+    { list: async () => [] } as never,
+    { latest: async () => null } as never,
   );
 
   await assert.rejects(
-    service.estimateMeal({ description: 'A bowl of rice' }),
+    service.estimateMeal('guest-1', { description: 'A bowl of rice' }),
     error => {
       const typedError = error as { code: string; statusCode: number };
       assert.equal(typedError.code, 'AI_PROVIDER_TIMEOUT');
