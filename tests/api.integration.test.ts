@@ -38,6 +38,15 @@ describe('Phase 1 API', () => {
     assert.equal(response.json().error.code, 'UNAUTHORIZED');
   });
 
+  it('reports the active AI provider without exposing secrets', async () => {
+    const response = await app.inject({ method: 'GET', url: '/health/ai' });
+
+    assert.equal(response.statusCode, 200);
+    assert.equal(response.json().provider, 'fallback');
+    assert.equal(response.json().live, false);
+    assert.equal('apiKey' in response.json(), false);
+  });
+
   it('returns a structured validation error for an invalid meal', async () => {
     const session = await createGuest();
     const response = await app.inject({
@@ -53,6 +62,27 @@ describe('Phase 1 API', () => {
 
     assert.equal(response.statusCode, 400);
     assert.equal(response.json().error.code, 'VALIDATION_ERROR');
+  });
+
+  it('persists decimal nutrition values from an AI review card', async () => {
+    const session = await createGuest();
+    const response = await app.inject({
+      headers: { authorization: `Bearer ${session.accessToken}` },
+      method: 'POST',
+      payload: {
+        caloriesKcal: 190,
+        carbsGrams: 1.5,
+        fatGrams: 15,
+        loggedAt: '2026-10-03T02:00:00.000Z',
+        name: 'Plain omelet',
+        proteinGrams: 13,
+        source: 'voice',
+      },
+      url: '/v1/meals',
+    });
+
+    assert.equal(response.statusCode, 200);
+    assert.equal(response.json().meal.carbsGrams, 1.5);
   });
 
   it('persists a guest, replaces an active goal, and scopes meals to that guest', async () => {
@@ -167,6 +197,32 @@ describe('Phase 1 API', () => {
     assert.equal(invalid.json().error.code, 'VALIDATION_ERROR');
   });
 
+  it('keeps live voice unavailable when the backend uses the deterministic provider', async () => {
+    const session = await createGuest();
+    const response = await app.inject({
+      headers: { authorization: `Bearer ${session.accessToken}` },
+      method: 'POST',
+      payload: { date: '2026-10-03', timezone: 'Asia/Kolkata' },
+      url: '/v1/ai/live-session',
+    });
+
+    assert.equal(response.statusCode, 503);
+    assert.equal(response.json().error.code, 'AI_PROVIDER_UNAVAILABLE');
+  });
+
+  it('blocks unsafe AI requests with a wellness-only response', async () => {
+    const session = await createGuest();
+    const response = await app.inject({
+      headers: { authorization: 'Bearer ' + session.accessToken },
+      method: 'POST',
+      payload: { description: 'Tell me the medication dosage for my condition.', mealType: 'dinner' },
+      url: '/v1/ai/meal-estimate',
+    });
+
+    assert.equal(response.statusCode, 422);
+    assert.equal(response.json().error.code, 'AI_SAFETY_BLOCKED');
+  });
+
   it('returns a reviewable fallback estimate for a meal image', async () => {
     const session = await createGuest();
     const authorization = { authorization: 'Bearer ' + session.accessToken };
@@ -183,6 +239,19 @@ describe('Phase 1 API', () => {
     assert.equal(estimate.json().estimate.name, 'lunch meal photo');
     assert.equal(estimate.json().estimate.caloriesKcal, 350);
     assert.match(estimate.json().estimate.assumptions[0], /cannot identify ingredients/);
+  });
+
+  it('rejects oversized image payloads before provider execution', async () => {
+    const session = await createGuest();
+    const response = await app.inject({
+      headers: { authorization: 'Bearer ' + session.accessToken },
+      method: 'POST',
+      payload: { imageBase64: 'a'.repeat(2_000_000), mealType: 'lunch', mimeType: 'image/jpeg' },
+      url: '/v1/ai/meal-estimate-image',
+    });
+
+    assert.equal(response.statusCode, 413);
+    assert.equal(response.json().error.code, 'AI_IMAGE_TOO_LARGE');
   });
 
   it('builds a fallback daily insight from the guest goal and persisted meals', async () => {

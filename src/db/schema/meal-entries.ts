@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { check, index, integer, pgEnum, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { check, index, integer, numeric, pgEnum, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 
 import { guests } from './guests.js';
 
@@ -18,9 +18,9 @@ export const mealEntries = pgTable(
     mealType: mealType('meal_type').default('snacks').notNull(),
     loggedAt: timestamp('logged_at', { withTimezone: true }).notNull(),
     caloriesKcal: integer('calories_kcal'),
-    proteinGrams: integer('protein_grams'),
-    carbsGrams: integer('carbs_grams'),
-    fatGrams: integer('fat_grams'),
+    proteinGrams: numeric('protein_grams', { mode: 'number', precision: 8, scale: 1 }),
+    carbsGrams: numeric('carbs_grams', { mode: 'number', precision: 8, scale: 1 }),
+    fatGrams: numeric('fat_grams', { mode: 'number', precision: 8, scale: 1 }),
     note: text('note'),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),

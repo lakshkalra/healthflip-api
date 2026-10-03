@@ -10,5 +10,6 @@ export function registerAiRouter(
 ): void {
   app.post('/v1/ai/meal-estimate', { preHandler: requireGuest }, controller.estimateMeal);
   app.post('/v1/ai/meal-estimate-image', { preHandler: requireGuest }, controller.estimateMealFromImage);
+  app.post('/v1/ai/live-session', { preHandler: requireGuest }, controller.createLiveSession);
   app.get('/v1/ai/daily-insight', { preHandler: requireGuest }, controller.dailyInsight);
 }

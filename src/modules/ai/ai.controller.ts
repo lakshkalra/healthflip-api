@@ -1,7 +1,7 @@
 import type { FastifyRequest } from 'fastify';
 
 import { parseOrThrow } from '../../shared/validation.js';
-import { dailyInsightQueryValidator, imageMealEstimateValidator, mealEstimateValidator } from './ai.validator.js';
+import { dailyInsightQueryValidator, imageMealEstimateValidator, liveSessionValidator, mealEstimateValidator } from './ai.validator.js';
 import type { createAiService } from './ai.service.js';
 
 export function createAiController(service: ReturnType<typeof createAiService>) {
@@ -21,6 +21,11 @@ export function createAiController(service: ReturnType<typeof createAiService>) 
       return {
         insight: await service.getDailyInsight(request.guest!.id, query.date, query.timezone),
       };
+    },
+
+    async createLiveSession(request: FastifyRequest) {
+      const input = parseOrThrow(liveSessionValidator, request.body);
+      return { session: await service.createLiveSession(request.guest!.id, input.date, input.timezone) };
     },
   };
 }

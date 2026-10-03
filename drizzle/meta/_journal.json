@@ -22,6 +22,13 @@
       "when": 1790922484041,
       "tag": "0002_concerned_puff_adder",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790992043824,
+      "tag": "0003_decimal_macros",
+      "breakpoints": true
     }
   ]
 }

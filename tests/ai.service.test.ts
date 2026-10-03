@@ -19,6 +19,7 @@ test('maps provider timeout failures to a structured app error', async () => {
         throw new Error('not used');
       },
     },
+    { createSession: async () => { throw new Error('not used'); } },
   );
 
   await assert.rejects(

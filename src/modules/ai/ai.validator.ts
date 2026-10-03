@@ -28,4 +28,11 @@ export const dailyInsightQueryValidator = z
   })
   .strict();
 
+export const liveSessionValidator = z
+  .object({
+    date: dateSchema.default(() => new Date().toISOString().slice(0, 10)),
+    timezone: timeZoneSchema.default('UTC'),
+  })
+  .strict();
+
 export type MealEstimateInput = z.infer<typeof mealEstimateValidator>;

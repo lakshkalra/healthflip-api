@@ -44,10 +44,23 @@ export type DailyInsight = {
   source: AiSource;
 };
 
+export type LiveSession = {
+  expiresAt: string;
+  model: string;
+  token: string;
+  websocketUrl: string;
+};
+
+export type LiveSessionContext = DailyInsightContext;
+
 export interface AiProvider {
   estimateMeal(input: MealEstimateInput): Promise<MealEstimate>;
   estimateMealFromImage(input: ImageMealEstimateInput): Promise<MealEstimate>;
   dailyInsight(context: DailyInsightContext): Promise<DailyInsight>;
+}
+
+export interface LiveSessionProvider {
+  createSession(context: LiveSessionContext): Promise<LiveSession>;
 }
 
 export type AiProviderErrorCode =

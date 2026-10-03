@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const mealSourceValidator = z.enum(['manual', 'photo', 'voice']);
 export const mealTypeValidator = z.enum(['breakfast', 'lunch', 'snacks', 'dinner']);
-const nutritionValueSchema = z.number().int().min(0).max(100_000);
+const nutritionValueSchema = z.number().min(0).max(100_000);
 
 export const createMealValidator = z
   .object({

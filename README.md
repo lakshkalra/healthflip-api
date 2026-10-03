@@ -53,6 +53,9 @@ TEST_DATABASE_URL=postgres://healthflip:healthflip@127.0.0.1:5432/healthflip_tes
 ## Vercel preparation
 
 Deploy this repository as the Vercel project root. Vercel recognizes Fastify entrypoints
-under `src/`; production configuration needs only `DATABASE_URL` for the managed
-PostgreSQL instance. Deployment and credential setup are deferred until the user
-authorizes them.
+under `src/`; production configuration needs `DATABASE_URL` and, for live AI,
+`GEMINI_API_KEY` for the managed PostgreSQL instance. Keep the Gemini key in the backend
+environment only. When the key is absent, the API deliberately uses the deterministic
+fallback provider for local development and tests. Optional settings are `GEMINI_MODEL`
+(default `gemini-3.8-flash`) and `GEMINI_TIMEOUT_MS` (default `15000`). Deployment and
+credential setup are deferred until the user authorizes them.
