@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
 import { afterEach, test } from 'node:test';
 
-import { guardMealEstimateOutput, guardReportOutput } from '../src/modules/ai/ai.guardrails.js';
-import { createReportService } from '../src/modules/reports/report.service.js';
-import { AiProviderError, type AiProvider } from '../src/shared/ai/ai-provider.js';
-import { createFallbackProvider } from '../src/shared/ai/fallback-provider.js';
-import { createGeminiProvider } from '../src/shared/ai/gemini-provider.js';
-import { healthNotesFrom, type ReportDraft } from '../src/shared/reports.js';
+import { guardMealEstimateOutput, guardReportOutput } from '../../src/modules/ai/ai.guardrails.js';
+import { createReportService } from '../../src/modules/reports/report.service.js';
+import { AiProviderError, type AiProvider } from '../../src/shared/ai/ai-provider.js';
+import { createFallbackProvider } from '../../src/shared/ai/fallback/fallback-provider.js';
+import { createGeminiProvider } from '../../src/shared/ai/gemini/gemini-provider.js';
+import { healthNotesFrom, type ReportDraft } from '../../src/domain/reports.js';
 
 const originalFetch = globalThis.fetch;
 afterEach(() => {

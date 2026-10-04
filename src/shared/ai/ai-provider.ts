@@ -1,6 +1,6 @@
-import type { ActivityLevel, GoalType, PlanBaseline, PlanTargets, Sex } from '../nutrition.js';
-import type { DietPlanContent, DietPlanOptions, ExercisePlanContent, ExercisePlanOptions } from '../plans.js';
-import type { ReportDraft, ReportFile } from '../reports.js';
+import type { ActivityLevel, GoalType, PlanBaseline, PlanTargets, Sex } from '../../domain/nutrition.js';
+import type { DietPlanContent, DietPlanOptions, ExercisePlanContent, ExercisePlanOptions } from '../../domain/plans.js';
+import type { ReportDraft, ReportFile } from '../../domain/reports.js';
 
 export type AiSource = 'ai' | 'fallback';
 export type AiConfidence = 'low' | 'medium' | 'high';

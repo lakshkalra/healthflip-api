@@ -8,7 +8,7 @@ import {
   type MealEstimateInput,
   type PlanRecommendation,
   type PlanRecommendationContext,
-} from './ai-provider.js';
+} from '../ai-provider.js';
 import { fallbackDietPlan, fallbackExercisePlan } from './fallback-plans.js';
 
 const fallbackProfiles = [

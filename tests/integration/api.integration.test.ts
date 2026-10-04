@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import { after, before, beforeEach, describe, it } from 'node:test';
 
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
-import { buildApp } from '../src/app.js';
-import { closeDatabase, createDatabase } from '../src/db/client.js';
+import { buildApp } from '../../src/app.js';
+import { closeDatabase, createDatabase } from '../../src/db/client.js';
 
 const testDatabaseUrl = process.env.TEST_DATABASE_URL;
 

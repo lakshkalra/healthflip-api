@@ -1,6 +1,6 @@
 import { boolean, date, index, jsonb, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 
-import type { ReportValue } from '../../shared/reports.js';
+import type { ReportValue } from '../../domain/reports.js';
 import { guests } from './guests.js';
 
 // Values the guest confirmed from an uploaded lab report. The uploaded file itself is never stored.

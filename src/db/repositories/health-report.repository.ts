@@ -1,6 +1,6 @@
 import { and, desc, eq } from 'drizzle-orm';
 
-import type { ReportDraft } from '../../shared/reports.js';
+import type { ReportDraft } from '../../domain/reports.js';
 import type { DatabaseClient } from '../client.js';
 import { healthReports } from '../schema/index.js';
 

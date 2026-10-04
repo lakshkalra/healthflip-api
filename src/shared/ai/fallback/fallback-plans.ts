@@ -1,5 +1,5 @@
-import type { DietPlanContent, DietPlanOptions, ExercisePlanContent, ExercisePlanOptions } from '../plans.js';
-import type { WellnessPlanContext } from './ai-provider.js';
+import type { DietPlanContent, DietPlanOptions, ExercisePlanContent, ExercisePlanOptions } from '../../../domain/plans.js';
+import type { WellnessPlanContext } from '../ai-provider.js';
 
 // Template plans used when the AI is unavailable (and in tests). Plain, balanced and scaled to the
 // user's calorie target; the app labels them as standard templates.

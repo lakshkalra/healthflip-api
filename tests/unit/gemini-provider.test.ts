@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import { afterEach, test } from 'node:test';
 
-import { AiProviderError } from '../src/shared/ai/ai-provider.js';
-import { createGeminiProvider } from '../src/shared/ai/gemini-provider.js';
-import { guardMealEstimateOutput } from '../src/modules/ai/ai.guardrails.js';
+import { AiProviderError } from '../../src/shared/ai/ai-provider.js';
+import { createGeminiProvider } from '../../src/shared/ai/gemini/gemini-provider.js';
+import { guardMealEstimateOutput } from '../../src/modules/ai/ai.guardrails.js';
 
 const originalFetch = globalThis.fetch;
 const estimate = { assumptions: [], caloriesKcal: 330, carbsGrams: 55, confidence: 'medium', fatGrams: 7, name: 'Roti and dal', proteinGrams: 11 };

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { dietPlanContentSchema, dietPlanOptionsSchema, exercisePlanContentSchema, exercisePlanOptionsSchema } from '../../shared/plans.js';
+import { dietPlanContentSchema, dietPlanOptionsSchema, exercisePlanContentSchema, exercisePlanOptionsSchema } from '../../domain/plans.js';
 
 export const generatePlanValidator = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('diet'), options: dietPlanOptionsSchema.prefault({}) }).strict(),

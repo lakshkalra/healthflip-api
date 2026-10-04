@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 import { AiProviderError, type DailyInsight, type ImageMealEstimateInput, type MealEstimate, type PlanRecommendation } from '../../shared/ai/ai-provider.js';
-import type { PlanBaseline } from '../../shared/nutrition.js';
-import { hasFlaggedFluidMarker, reportDraftSchema, type ReportDraft } from '../../shared/reports.js';
+import type { PlanBaseline } from '../../domain/nutrition.js';
+import { hasFlaggedFluidMarker, reportDraftSchema, type ReportDraft } from '../../domain/reports.js';
 import { AppError } from '../../shared/errors.js';
 
 const MAX_IMAGE_BASE64_LENGTH = 2_000_000;

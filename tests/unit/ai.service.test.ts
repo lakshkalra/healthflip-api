@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { AiProviderError } from '../src/shared/ai/ai-provider.js';
-import { createAiService } from '../src/modules/ai/ai.service.js';
+import { AiProviderError } from '../../src/shared/ai/ai-provider.js';
+import { createAiService } from '../../src/modules/ai/ai.service.js';
 
 test('maps provider timeout failures to a structured app error', async () => {
   const service = createAiService(

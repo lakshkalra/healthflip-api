@@ -1,5 +1,4 @@
 import type { MealRepository } from '../../db/repositories/meal.repository.js';
-import { notFound } from '../../shared/errors.js';
 import { requireMeal, serializeMeal, toCreateMealRecord, toUpdateMealRecord } from './meal.helper.js';
 import type { CreateMealInput, UpdateMealInput } from './meal.validator.js';
 

@@ -1,4 +1,4 @@
-import { AiProviderError, type LiveSession, type LiveSessionContext, type LiveSessionProvider } from './ai-provider.js';
+import { AiProviderError, type LiveSession, type LiveSessionContext, type LiveSessionProvider } from '../ai-provider.js';
 
 type GeminiLiveSessionProviderOptions = {
   apiKey: string;

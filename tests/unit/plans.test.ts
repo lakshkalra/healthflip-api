@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { planFileName } from '../src/modules/plans/plan.helper.js';
-import { renderPlanPdf } from '../src/modules/plans/plan.pdf.js';
-import { avoidedFoods, fallbackDietPlan, fallbackExercisePlan } from '../src/shared/ai/fallback-plans.js';
-import { dietPlanContentSchema, dietPlanOptionsSchema, exercisePlanContentSchema, exercisePlanOptionsSchema } from '../src/shared/plans.js';
+import { planFileName } from '../../src/modules/plans/plan.helper.js';
+import { renderPlanPdf } from '../../src/modules/plans/plan.pdf.js';
+import { avoidedFoods, fallbackDietPlan, fallbackExercisePlan } from '../../src/shared/ai/fallback/fallback-plans.js';
+import { dietPlanContentSchema, dietPlanOptionsSchema, exercisePlanContentSchema, exercisePlanOptionsSchema } from '../../src/domain/plans.js';
 
 const context = {
   goal: { dailyCalorieTarget: 1800, dailyStepsTarget: 8000, macroTargets: { carbsGrams: 200, fatGrams: 54, proteinGrams: 110 }, type: 'lose' as const },

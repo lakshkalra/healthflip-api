@@ -1,7 +1,7 @@
 import type { HealthReportRepository } from '../../db/repositories/health-report.repository.js';
 import type { AiProvider } from '../../shared/ai/ai-provider.js';
 import { notFound } from '../../shared/errors.js';
-import type { ReportDraft } from '../../shared/reports.js';
+import type { ReportDraft } from '../../domain/reports.js';
 import { guardReportOutput } from '../ai/ai.guardrails.js';
 import { mapProviderError } from '../ai/ai.service.js';
 import { serializeReport, serializeReportSummary } from './report.helper.js';

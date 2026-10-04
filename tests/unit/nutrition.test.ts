@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { guardPlanOutput } from '../src/modules/ai/ai.guardrails.js';
-import { planBaseline } from '../src/shared/nutrition.js';
+import { guardPlanOutput } from '../../src/modules/ai/ai.guardrails.js';
+import { planBaseline } from '../../src/domain/nutrition.js';
 
 const man = { activityLevel: 'moderate', age: 30, heightCm: 178, sex: 'male', weightKg: 75 } as const;
 const woman = { activityLevel: 'sedentary', age: 25, heightCm: 165, sex: 'female', weightKg: 60 } as const;

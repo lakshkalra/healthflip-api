@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { REPORT_FILE_TYPES, reportDraftSchema } from '../../shared/reports.js';
+import { REPORT_FILE_TYPES, reportDraftSchema } from '../../domain/reports.js';
 
 // Gemini accepts about 20 MB of inline data per request, so files are capped well under that.
 export const MAX_REPORT_FILE_BASE64 = 8_000_000;

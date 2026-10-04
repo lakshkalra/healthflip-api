@@ -1,6 +1,6 @@
 import PDFDocument from 'pdfkit';
 
-import type { DietPlanContent, ExercisePlanContent } from '../../shared/plans.js';
+import type { DietPlanContent, ExercisePlanContent } from '../../domain/plans.js';
 
 type PdfPlan =
   | { content: DietPlanContent; createdAt: Date; kind: 'diet' }

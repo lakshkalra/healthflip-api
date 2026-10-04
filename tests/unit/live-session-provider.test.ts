@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { afterEach, test } from 'node:test';
 
-import { AiProviderError } from '../src/shared/ai/ai-provider.js';
-import { createGeminiLiveSessionProvider } from '../src/shared/ai/live-session-provider.js';
+import { AiProviderError } from '../../src/shared/ai/ai-provider.js';
+import { createGeminiLiveSessionProvider } from '../../src/shared/ai/gemini/live-session-provider.js';
 
 const originalFetch = globalThis.fetch;
 const context = {} as never;

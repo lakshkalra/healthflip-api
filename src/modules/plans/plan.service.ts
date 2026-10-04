@@ -4,10 +4,10 @@ import type { MemoryRepository } from '../../db/repositories/memory.repository.j
 import type { ProfileRepository } from '../../db/repositories/profile.repository.js';
 import type { WellnessPlanRepository } from '../../db/repositories/wellness-plan.repository.js';
 import type { AiProvider, WellnessPlanContext } from '../../shared/ai/ai-provider.js';
-import { fallbackDietPlan, fallbackExercisePlan } from '../../shared/ai/fallback-plans.js';
+import { fallbackDietPlan, fallbackExercisePlan } from '../../shared/ai/fallback/fallback-plans.js';
 import { notFound } from '../../shared/errors.js';
-import { healthNotesFrom } from '../../shared/reports.js';
-import { dietPlanContentSchema, exercisePlanContentSchema, type DietPlanContent, type ExercisePlanContent, type PlanDraft } from '../../shared/plans.js';
+import { healthNotesFrom } from '../../domain/reports.js';
+import { dietPlanContentSchema, exercisePlanContentSchema, type DietPlanContent, type ExercisePlanContent, type PlanDraft } from '../../domain/plans.js';
 import { guardPlanNotes } from '../ai/ai.guardrails.js';
 import { serializePlanTargets } from '../goals/goal.helper.js';
 import { toProfileContext } from '../profile/profile.helper.js';

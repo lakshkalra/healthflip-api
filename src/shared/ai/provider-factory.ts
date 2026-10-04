@@ -1,6 +1,6 @@
-import { createFallbackProvider } from './fallback-provider.js';
-import { createGeminiProvider } from './gemini-provider.js';
-import { createGeminiLiveSessionProvider, createUnavailableLiveSessionProvider } from './live-session-provider.js';
+import { createFallbackProvider } from './fallback/fallback-provider.js';
+import { createGeminiProvider } from './gemini/gemini-provider.js';
+import { createGeminiLiveSessionProvider, createUnavailableLiveSessionProvider } from './gemini/live-session-provider.js';
 import type { AiProvider, LiveSessionProvider } from './ai-provider.js';
 
 export type AiProviderMode = 'auto' | 'fallback' | 'gemini';
